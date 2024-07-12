@@ -1855,7 +1855,7 @@ class IntervenableModel(BaseModel):
         base_outputs = None
         if output_original_output:
             # returning un-intervened output with gradients
-            base_outputs = self.model(**base)
+            base_outputs = self.model(**base, output_hidden_states=True)
 
         try:
             # intervene
@@ -1884,6 +1884,8 @@ class IntervenableModel(BaseModel):
                 model_kwargs["labels"] = labels
             if 'use_cache' in self.model.config.to_dict(): # for transformer models
                 model_kwargs["use_cache"] = use_cache
+
+            model_kwargs["output_hidden_states"] = True
 
             counterfactual_outputs = self.model(**base, **model_kwargs)
 
